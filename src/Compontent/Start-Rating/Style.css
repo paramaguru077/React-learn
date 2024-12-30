@@ -1,0 +1,14 @@
+.active{
+    color: yellow;
+    font-size: 20px;
+    padding: 1px;
+}
+.inactive{
+    color: black;
+}
+.star-rating{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+}
