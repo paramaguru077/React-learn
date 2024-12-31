@@ -52,7 +52,7 @@ const LoadMoreData = () => {
           </div>
         )}
       </div>
-      <div className="button-container">
+      <div className="btn">
         <button type="button" onClick={handleClick} disabled={disable}>
           {loading ? 'Loading...' : 'Load More Products'}
         </button>

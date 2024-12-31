@@ -16,15 +16,17 @@
     flex-direction: column;
     align-items: center;
 }
-.button-contaier{
+.load-more-container .btn{
     width: 100%;
     display: flex;
     justify-content: center;
+    
 }
-.button-contaier button{
+/* Increase specificity */
+.load-more-container .btn button {
     padding: 10px 20px;
     color: white;
-    background-color: green;
+    background-color: green !important; /* Ensure the background color applies */
     border: none;
     border-radius: 5px;
     cursor: pointer;
