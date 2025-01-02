@@ -30,13 +30,17 @@ const LoadMoreData = () => {
     fetchData();
   }, [count]);
 
-  const handleScroll =()=>{
-   
-    if(window.innerHeight+document.documentElement.scrollTop+1>=document.documentElement.scrollHeight){
+  const handleScroll = () => {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 1) {
       setLoading(true);
-      setCount(prev=>prev+1);
+      setCount((prev) => prev + 1);
     }
-  }
+  };
+  
+   
+    
+  
   
 
   useEffect(()=>{
