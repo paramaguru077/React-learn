@@ -11,39 +11,30 @@ const LoadMoreData = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://dummyjson.com/products?limit=5&skip=${count * 20}`
+        `https://dummyjson.com/products?limit=20&skip=${count * 20}`
       );
       const results = await response.json();
       if (results && results.products) {
         setProducts((prevProducts) => [...prevProducts, ...results.products]);
-        setLoading(false);
         if (results.products.length === 0) {
           setDisable(true); // Disable button if no more products
         }
       }
     } catch (e) {
       console.error(e);
-    } 
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchData();
   }, [count]);
 
-  const handleScroll =()=>{
-   
-    if(window.innerHeight+document.documentElement.scrollTop+1>=document.documentElement.scrollHeight){
-      setLoading(true);
-      setCount(prev=>prev+1);
-    }
-  }
-  
-
-  useEffect(()=>{
-    window.addEventListener("scroll",handleScroll);
-    return ()=>window.removeEventListener("scroll",handleScroll);
-  },[])
-  
+  const handleClick = (e) => {
+    e.preventDefault(); // Prevent default behavior
+    setCount((c) => c + 1);
+  };
 
   return (
     <div className="load-more-container">
@@ -57,16 +48,17 @@ const LoadMoreData = () => {
             </div>
           ))
         ) : (
-          <div className='wait'>
-            <h1>Wait for some time</h1>
+          <div>
+            <h1>No Products Available</h1>
           </div>
         )}
       </div>
-       <div className='loading'>
-       {loading&& <p> Please wait</p>}
-       </div>
-      
-     
+      <div className="btn">
+        <button type="button" onClick={handleClick} disabled={disable}>
+          {loading ? 'Loading...' : 'Load More Products'}
+        </button>
+      </div>
+      {disable && <p>No more products to load.</p>}
     </div>
   );
 };
