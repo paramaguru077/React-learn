@@ -1,8 +1,16 @@
+html, body {
+    height: auto; 
+    overflow-y: scroll; 
+  }
+  
+  
+  
 .load-more-container{
     display: flex;
     flex-direction: column;
     gap: 20px;
     background-color: rgb(225, 217, 228);
+    min-height: 100vh;
 }
 .product-container{
     display: grid;
