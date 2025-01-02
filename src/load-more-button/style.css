@@ -94,6 +94,15 @@
     font-size: 20px;
     color: blueviolet;
 }
-
+.empty{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.empty h1{
+    color: rgb(235, 57, 57);
+    text-transform: capitalize;
+    font-size: 20px;
+}
 
 

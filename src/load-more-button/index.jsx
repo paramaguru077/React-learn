@@ -63,7 +63,10 @@ const LoadMoreData = () => {
         )}
       </div>
        <div className='loading'>
-       {loading&& <p> Please wait</p>}
+       {loading&& !disable &&<p> Please wait</p>}
+       </div>
+       <div className='empty'>
+       {disable&& <h1> no products available</h1>}
        </div>
       
      
