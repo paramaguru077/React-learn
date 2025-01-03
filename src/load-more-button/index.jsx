@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './style.css';
 
 const LoadMoreData = () => {
@@ -6,52 +6,52 @@ const LoadMoreData = () => {
   const [products, setProducts] = useState([]);
   const [count, setCount] = useState(0);
   const [disable, setDisable] = useState(false);
+  const loaderRef = useRef(null);
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://dummyjson.com/products?limit=5&skip=${count * 20}`
+        `https://dummyjson.com/products?limit=10&skip=${count * 20}`
       );
       const results = await response.json();
       if (results && results.products) {
         setProducts((prevProducts) => [...prevProducts, ...results.products]);
         setLoading(false);
         if (results.products.length === 0) {
-          setDisable(true); // Disable button if no more products
+          setDisable(true);
         }
       }
     } catch (e) {
       console.error(e);
-    } 
+    }
   };
 
   useEffect(() => {
     fetchData();
   }, [count]);
 
-  const handleScroll = () => {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-    const clientHeight = document.documentElement.clientHeight || window.innerHeight;
-  
-    if (scrollTop + clientHeight >= scrollHeight - 1) {
-      setLoading(true);
-      setCount((prev) => prev + 1);
-    }
-  };
-  
-  
-   
-    
-  
-  
+  // IntersectionObserver logic
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading && !disable) {
+          setCount((prevCount) => prevCount + 1);
+        }
+      }
+      
+    );
 
-  useEffect(()=>{
-    window.addEventListener("scroll",handleScroll);
-    return ()=>window.removeEventListener("scroll",handleScroll);
-  },[])
-  
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current); // Clean up observer
+      }
+    };
+  }, [loading, disable]);
 
   return (
     <div className="load-more-container">
@@ -61,23 +61,21 @@ const LoadMoreData = () => {
             <div className="products" key={i}>
               <img src={product.thumbnail} alt={product.title} />
               <p>{product.title}</p>
-              <button>Add to card</button>
+              <button>Add to cart</button>
             </div>
           ))
         ) : (
-          <div className='wait'>
+          <div className="wait">
             <h1>Wait for some time</h1>
           </div>
         )}
       </div>
-       <div className='loading'>
-       {loading&& !disable &&<p> Please wait</p>}
-       </div>
-       <div className='empty'>
-       {disable&& <h1> no products available</h1>}
-       </div>
-      
-     
+      <div ref={loaderRef} className="loading">
+        {loading && !disable && <p>Loading more...</p>}
+      </div>
+      <div className="empty">
+        {disable && <h1>No products available</h1>}
+      </div>
     </div>
   );
 };
