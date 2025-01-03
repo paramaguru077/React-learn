@@ -31,7 +31,6 @@ const LoadMoreData = () => {
     fetchData();
   }, [count]);
 
-  // IntersectionObserver logic
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -48,7 +47,7 @@ const LoadMoreData = () => {
 
     return () => {
       if (loaderRef.current) {
-        observer.unobserve(loaderRef.current); // Clean up observer
+        observer.unobserve(loaderRef.current); 
       }
     };
   }, [loading, disable]);
